@@ -19,7 +19,8 @@ class CreateAccountsTable extends Migration
             $table->string('username')->nullable();
             $table->string('email')->nullable();
             $table->string('tel')->nullable();
-            $table->decimal('balance')->unsigned()->default(0);
+            $table->bigInteger('balance')->unsigned()->default(0);
+            $table->tinyInteger('is_root')->default(0);
             $table->timestamps();
         });
     }

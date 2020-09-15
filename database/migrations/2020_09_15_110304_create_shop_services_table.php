@@ -15,6 +15,13 @@ class CreateShopServicesTable extends Migration
     {
         Schema::create('shop_services', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('shop_id');
+            $table->bigInteger('service_id');
+            $table->bigInteger('service_parent_id')->default(-1);
+            $table->bigInteger('price')->unsigned()->default(0);
+            $table->text('description')->nullable();
+            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('is_root')->default(0);
             $table->timestamps();
         });
     }

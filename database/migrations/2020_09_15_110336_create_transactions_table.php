@@ -15,6 +15,16 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('ref_id')->default(-1);
+            $table->bigInteger('pipline_id');
+            $table->bigInteger('shop_id');
+            $table->bigInteger('shop_service_id');
+            $table->bigInteger('amount')->default(0);
+            $table->bigInteger('from_account_id');
+            $table->bigInteger('to_account_id');
+            $table->tinyInteger('type')->default(0);
+            $table->tinyInteger('status')->default(0);
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }

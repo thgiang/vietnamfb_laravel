@@ -18,7 +18,7 @@ class CreateShopsTable extends Migration
             $table->bigInteger('account_id');
             $table->bigInteger('ref_id');
             $table->string('name')->nullable();
-            $table->string();
+            $table->string('domain', 50)->nullable();
             $table->timestamps();
         });
     }

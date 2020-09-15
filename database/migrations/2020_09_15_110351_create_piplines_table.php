@@ -15,6 +15,12 @@ class CreatePiplinesTable extends Migration
     {
         Schema::create('piplines', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('shop_id');
+            $table->bigInteger('amount')->default(0);
+            $table->bigInteger('account_id');
+            $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('type')->default(0);
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }
