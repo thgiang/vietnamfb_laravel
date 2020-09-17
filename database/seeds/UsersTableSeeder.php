@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder
     {
         \App\User::query()->truncate(); // truncate user table each time of seeders run
         \App\User::create([ // create a new user
-            'email' => 'admin@admin.com',
+            'email' => 'admin@gmail.com',
             'password' => \Illuminate\Support\Facades\Hash::make('admin'),
             'name' => 'Administrator'
         ]);

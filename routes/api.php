@@ -13,7 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('login', 'Api\AuthController@login');
+Route::group([
+    'middleware' => ['api'],
+], function ($router) {
+    Route::post('login', 'Api\AuthController@login');
+});
+
 
 Route::group([
     'middleware' => ['api', 'jwt.verify'],
