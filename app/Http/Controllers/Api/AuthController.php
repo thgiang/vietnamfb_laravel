@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Account;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -11,9 +13,11 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
         $credentials = request(['email', 'password']);
+
+        $credentials['shop_id'] = $request->header('shopId');
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json([
@@ -32,7 +36,12 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $account = Account::with('shop')->where('id', auth()->user()->id)->first();
+
+        return response()->json([
+            'success' => true,
+            'data' => $account
+        ]);
     }
 
     /**
