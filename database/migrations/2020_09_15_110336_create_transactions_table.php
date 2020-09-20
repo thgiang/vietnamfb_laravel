@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('ref_id')->default(-1);
-            $table->bigInteger('pipline_id');
+            $table->bigInteger('package_id');
             $table->bigInteger('shop_id');
             $table->bigInteger('shop_service_id');
             $table->bigInteger('amount')->default(0);

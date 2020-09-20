@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePiplinesTable extends Migration
+class CreatePackagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,18 @@ class CreatePiplinesTable extends Migration
      */
     public function up()
     {
-        Schema::create('piplines', function (Blueprint $table) {
+        Schema::create('packages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('shop_id');
             $table->bigInteger('amount')->default(0);
             $table->bigInteger('account_id');
+            $table->integer('shop_service_id');
+            $table->text('package_json')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->tinyInteger('type')->default(0);
             $table->string('reason')->nullable();
             $table->timestamps();
+
         });
     }
 
@@ -32,6 +35,6 @@ class CreatePiplinesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('piplines');
+        Schema::dropIfExists('packages');
     }
 }
