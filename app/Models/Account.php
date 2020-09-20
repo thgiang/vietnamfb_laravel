@@ -24,9 +24,7 @@ class Account extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
 
-        return [
-            ''
-        ];
+        return [];
     }
 
     public function shop() {
