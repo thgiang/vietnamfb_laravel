@@ -29,8 +29,11 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::get('me', 'AuthController@me');
 
-    Route::post('users', 'UserController@store');
-    Route::get('users', 'UserController@index');
-
     Route::get('menus', 'HomeController@menus');
+
+    Route::group([
+        'prefix' => 'package'
+    ], function ($router) {
+        Route::post('add-order', 'PackageController@addOrder');
+    });
 });
