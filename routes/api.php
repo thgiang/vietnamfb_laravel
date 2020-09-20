@@ -31,4 +31,6 @@ Route::group([
 
     Route::post('users', 'UserController@store');
     Route::get('users', 'UserController@index');
+
+    Route::get('menus', 'HomeController@menus');
 });
