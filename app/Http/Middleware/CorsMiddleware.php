@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Shop;
 use Closure;
+use Illuminate\Support\Facades\Log;
 
 class CorsMiddleware
 {
@@ -26,6 +27,13 @@ class CorsMiddleware
         if($request->server('HTTP_ORIGIN')){
             if (in_array($request->server('HTTP_ORIGIN'), $allowedOrigins)) {
                 $shopId = $this->_getShop($request->server('HTTP_ORIGIN'));
+                if (empty($shopId)) {
+                    return response([
+                        "success" => false,
+                        'message' => '403 Permission denied'
+                    ], 403);
+                }
+
                 $request->headers->set('shopId', $shopId);
 
                 return $next($request)
@@ -38,6 +46,13 @@ class CorsMiddleware
 
         if ($request->header('isDev') == 1) {
             $shopId = $this->_getShop($request->header('HTTP_ORIGIN'));
+            if (empty($shopId)) {
+                return response([
+                    "success" => false,
+                    'message' => '403 Permission denied'
+                ], 403);
+            }
+
             $request->headers->set('shopId', $shopId);
 
             return $next($request);
@@ -53,6 +68,6 @@ class CorsMiddleware
     private function _getShop($domain) {
         $shop = Shop::where('domain', $domain)->first();
 
-        return $shop->id;
+        return !empty($shop->id) ? $shop->id : null;
     }
 }

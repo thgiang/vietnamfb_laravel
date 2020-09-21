@@ -32,8 +32,15 @@ Route::group([
     Route::get('menus', 'HomeController@menus');
 
     Route::group([
+        'prefix' => 'fb'
+    ], function ($router) {
+        Route::get('personal/subs-count', 'FacebookController@personalSubsCount');
+    });
+
+    Route::group([
         'prefix' => 'package'
     ], function ($router) {
+        Route::get('detail/{id}', 'PackageController@detail');
         Route::post('add-order', 'PackageController@addOrder');
     });
 });
