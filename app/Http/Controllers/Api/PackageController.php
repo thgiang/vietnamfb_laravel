@@ -20,9 +20,13 @@ class PackageController extends BaseController
         parent::__construct($request);
     }
 
-    private function _validateAddOrder($serviceType, $data) {
+    private function _validateAddOrder($data) {
         // todo: add logic
-        if ($serviceType == Service::FB_BUFF_SUB) {
+        if (empty($data['service_type'])) {
+            return 'Thiếu loại dịch vụ: `service_type`';
+        }
+
+        if ($data['service_type'] == Service::FB_BUFF_SUB) {
             return $this->_validateFbBuffSub($data);
         }
 
@@ -34,8 +38,8 @@ class PackageController extends BaseController
             return 'Thiếu id dịch vụ: `shop_service_id`';
         }
 
-        if (empty($data['service_type']) and !in_array($data['service_type'], [Service::FB_BUFF_SUB])) {
-            return 'Thiếu loại dịch vụ: `service_type`';
+        if (!in_array($data['service_type'], [Service::FB_BUFF_SUB])) {
+            return 'Không tồn tại loại dịch vụ này';
         }
 
         if (empty($data['quantity']) || $data['quantity'] <= 0) {
@@ -48,7 +52,7 @@ class PackageController extends BaseController
     public function addOrder(Request $request) {
         $data = $request->all();
 
-        $validate = $this->_validateAddOrder($data['service_type'], $data);
+        $validate = $this->_validateAddOrder($data);
 
         if (!empty($validate)) {
             return response(Utils::FailedResponse($validate));
@@ -84,7 +88,7 @@ class PackageController extends BaseController
 
             $transactionService->updateTransactionsStatus($transactionPackageStatus['transaction_ids'],
                 $transactionPackageStatus['status'], $transactionPackageStatus['reason']);
-            
+
         }
 
         unset($transactionPackageStatus['transaction_ids']);
