@@ -81,27 +81,10 @@ class PackageController extends BaseController
         $transactionPackageStatus = $transactionService->makeTransactionPiplineForPackage($package->id);
 
         if (!empty($transactionPackageStatus['transaction_ids']) and count($transactionPackageStatus['transaction_ids']) > 0) {
-            $dataUpdateTransactions['reason'] = $transactionPackageStatus['reason'];
 
-            if ($transactionPackageStatus['status'] == Package::STATUS_FAIL) {
-                $dataUpdateTransactions['status'] = Transaction::STATUS_FAIL;
-            } else if ($transactionPackageStatus['status'] == Package::STATUS_SUCCESS) {
-                $dataUpdateTransactions['status'] = Transaction::STATUS_SUCCESS;
-
-                // tru tien cua cac account
-                foreach ($transactionPackageStatus['transaction_ids'] as $transaction_id) {
-                    $eachTransaction = Transaction::find($transaction_id);
-
-                    $account = Account::find($eachTransaction->from_account_id);
-                    $account->update([
-                        'balance' => $account->balance - $eachTransaction->amount
-                    ]);
-                }
-            } else if ($transactionPackageStatus['status'] == Package::STATUS_WAITING) {
-                $dataUpdateTransactions['status'] = Transaction::STATUS_WAITING;
-            }
-
-            Transaction::whereIn('id', $transactionPackageStatus['transaction_ids'])->update($dataUpdateTransactions);
+            $transactionService->updateTransactionsStatus($transactionPackageStatus['transaction_ids'],
+                $transactionPackageStatus['status'], $transactionPackageStatus['reason']);
+            
         }
 
         unset($transactionPackageStatus['transaction_ids']);

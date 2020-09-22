@@ -117,4 +117,30 @@ class TransactionService
             'transaction_ids' => []
         ];
     }
+
+    public function updateTransactionsStatus($ids, $status, $reason) {
+        $dataUpdateTransactions['reason'] = $reason;
+
+        if ($status == Package::STATUS_FAIL) {
+            $dataUpdateTransactions['status'] = Transaction::STATUS_FAIL;
+        } else if ($status == Package::STATUS_SUCCESS) {
+            $dataUpdateTransactions['status'] = Transaction::STATUS_SUCCESS;
+
+            // tru tien cua cac account
+            foreach ($ids as $transaction_id) {
+                $eachTransaction = Transaction::find($transaction_id);
+
+                $account = Account::find($eachTransaction->from_account_id);
+                $account->update([
+                    'balance' => $account->balance - $eachTransaction->amount
+                ]);
+            }
+        } else if ($status == Package::STATUS_WAITING) {
+            $dataUpdateTransactions['status'] = Transaction::STATUS_WAITING;
+        }
+
+        Transaction::whereIn('id', $ids)->update($dataUpdateTransactions);
+
+        return;
+    }
 }
