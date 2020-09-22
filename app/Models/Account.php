@@ -11,7 +11,8 @@ class Account extends Authenticatable implements JWTSubject
     use Notifiable;
 
     protected $fillable = [
-        'fullname', 'username', 'email', 'tel', 'balance', 'is_root', 'password', 'fb_id', 'google_id', 'shop_id'
+        'fullname', 'username', 'email', 'tel', 'balance', 'is_root', 'password', 'fb_id', 'google_id', 'shop_id',
+        'has_shop_id'
     ];
 
     protected $hidden = ['password'];
@@ -23,7 +24,6 @@ class Account extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-
         return [];
     }
 

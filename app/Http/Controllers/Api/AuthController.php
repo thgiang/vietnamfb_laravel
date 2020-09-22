@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\Account;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends BaseController
@@ -22,10 +21,16 @@ class AuthController extends BaseController
         $credentials['shop_id'] = $this->shopNow;
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized'
-            ], 401);
+            // kiem tra neu account do la 1 shop thuoc shop current
+            unset($credentials['shop_id']);
+            $credentials['has_shop_id'] = $this->shopNow;
+
+            if (! $token = auth()->attempt($credentials)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized'
+                ], 401);
+            }
         }
 
         return $this->respondWithToken($token);

@@ -11,6 +11,6 @@ class Shop extends Model
     ];
 
     public function account() {
-        return $this->hasOne(Account::class);
+        return $this->hasOne(Account::class, 'id', 'account_id');
     }
 }

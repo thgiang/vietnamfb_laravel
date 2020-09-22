@@ -20,7 +20,8 @@ class AccountShopSeeder extends Seeder
             'fullname' => 'Root Shop',
             'tel' => '0339573050',
             'is_root' => 1,
-            'shop_id' => 1
+            'shop_id' => 1,
+            'has_shop_id' => 1
         ]);
 
         $account = \App\Models\Account::create([ // create a new user
