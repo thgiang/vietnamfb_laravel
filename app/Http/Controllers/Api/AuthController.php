@@ -28,7 +28,7 @@ class AuthController extends BaseController
             if (! $token = auth()->attempt($credentials)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Unauthorized'
+                    'message' => 'Tài khoản hoặc mật khẩu không đúng'
                 ], 401);
             }
         }
