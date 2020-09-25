@@ -67,7 +67,7 @@ class TransactionService
                     'reason' => 'Không tìm thấy tài khoản ID='.$transaction->from_account_id,
                     'transaction_ids' => $transactionIds
                 ];
-            } else if ($account->balance < $transaction->amount) {
+            } else if ($account->is_root == 0 && $account->balance < $transaction->amount) {
                 $statusFinalPackage = Package::STATUS_WAITING;
                 if ($account->id == $package->account_id) {
                     $statusFinalPackage = Package::STATUS_FAIL;

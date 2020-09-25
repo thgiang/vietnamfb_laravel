@@ -32,7 +32,8 @@ class AccountShopSeeder extends Seeder
             'tel' => '0339573051',
             'is_root' => 0,
             'shop_id' => 1,
-            'has_shop_id' => 2
+            'has_shop_id' => 2,
+            'balance' => 1000000
         ]);
 
         $accountShop1 = \App\Models\Account::create([ // create a new user
@@ -42,7 +43,8 @@ class AccountShopSeeder extends Seeder
             'fullname' => 'Acc 1',
             'tel' => '0339573052',
             'is_root' => 0,
-            'shop_id' => 1
+            'shop_id' => 1,
+            'balance' => 1000000
         ]);
 
         $accountShop2 = \App\Models\Account::create([ // create a new user
@@ -52,7 +54,8 @@ class AccountShopSeeder extends Seeder
             'fullname' => 'Acc 2',
             'tel' => '0339573053',
             'is_root' => 0,
-            'shop_id' => 2
+            'shop_id' => 2,
+            'balance' => 1000000
         ]);
 
         \App\Models\Shop::create([
@@ -63,8 +66,8 @@ class AccountShopSeeder extends Seeder
         ]);
 
         \App\Models\Shop::create([
-            'account_id' => $root->id,
-            'ref_id' => -1,
+            'account_id' => $accountAndShop->id,
+            'ref_id' => 1,
             'name' => 'Shop 1',
             'domain' => 'http://shop1.vietnamfb.local:8081'
         ]);
