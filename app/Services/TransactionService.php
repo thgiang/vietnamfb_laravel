@@ -14,7 +14,7 @@ class TransactionService
         $package = Package::find($packageId);
         if (empty($package)) {
             return [
-                'status' => Package::STATUS_FAIL,
+                'status' => Package::STATUS_ORDER_FAIL,
                 'reason' => 'Không tìm thấy đơn hàng ID='.$packageId,
                 'transaction_ids' => []
             ];
@@ -23,7 +23,7 @@ class TransactionService
         $shop = Shop::find($package->shop_id);
         if (empty($shop)) {
             return [
-                'status' => Package::STATUS_FAIL,
+                'status' => Package::STATUS_ORDER_FAIL,
                 'reason' => 'Không tìm thấy shop ID=' . $package->shop_id,
                 'transaction_ids' => []
             ];
@@ -32,7 +32,7 @@ class TransactionService
         $shopService = ShopService::find($package->shop_service_id);
         if (empty($shopService)) {
             return [
-                'status' => Package::STATUS_FAIL,
+                'status' => Package::STATUS_ORDER_FAIL,
                 'reason' => 'Không tìm thấy dịch vụ ID='.$shopService->id,
                 'transaction_ids' => []
             ];
@@ -64,18 +64,13 @@ class TransactionService
             $account = Account::find($transaction->from_account_id);
             if (empty($account)) {
                 return [
-                    'status' => Package::STATUS_FAIL,
+                    'status' => Package::STATUS_ORDER_FAIL,
                     'reason' => 'Không tìm thấy tài khoản ID='.$transaction->from_account_id,
                     'transaction_ids' => $transactionIds
                 ];
             } else if ($account->is_root == 0 && $account->balance < $transaction->amount) {
-                $statusFinalPackage = Package::STATUS_WAITING;
-                if ($account->id == $package->account_id) {
-                    $statusFinalPackage = Package::STATUS_FAIL;
-                }
-
                 return [
-                    'status' => $statusFinalPackage,
+                    'status' => Package::STATUS_ORDER_WAITING,
                     'reason' => 'Tài khoản '.$account->username.' (ID='.$account->id.') không đủ tiền, vui lòng nạp tiền và thử lại.',
                     'transaction_ids' => $transactionIds
                 ];
@@ -83,7 +78,7 @@ class TransactionService
 
             if ($shop->ref_id == -1) {
                 return [
-                    'status' => Package::STATUS_SUCCESS,
+                    'status' => Package::STATUS_ORDER_SUCCESS,
                     'reason' => 'Đặt hàng thành công',
                     'transaction_ids' => $transactionIds
                 ];
@@ -92,7 +87,7 @@ class TransactionService
             $shop = Shop::find($shop->ref_id);
             if (empty($shop)) {
                 return [
-                    'status' => Package::STATUS_FAIL,
+                    'status' => Package::STATUS_ORDER_FAIL,
                     'reason' => 'Không tìm thấy ref shop ID=' . $package->shop_id,
                     'transaction_ids' => $transactionIds
                 ];
@@ -102,7 +97,7 @@ class TransactionService
 
             if (empty($shopService)) {
                 return [
-                    'status' => Package::STATUS_FAIL,
+                    'status' => Package::STATUS_ORDER_FAIL,
                     'reason' => 'Không tìm thấy ref dịch vụ ID=' . $shopService->id,
                     'transaction_ids' => $transactionIds
                 ];
@@ -113,7 +108,7 @@ class TransactionService
         }
 
         return [
-            'status' => Package::STATUS_FAIL,
+            'status' => Package::STATUS_ORDER_FAIL,
             'reason' => 'Lỗi không xác định, vui lòng liên hệ với admin để được giải quyết',
             'transaction_ids' => []
         ];
@@ -122,9 +117,9 @@ class TransactionService
     public function updateTransactionsStatus($ids, $status, $reason) {
         $dataUpdateTransactions['reason'] = $reason;
 
-        if ($status == Package::STATUS_FAIL) {
+        if ($status == Package::STATUS_ORDER_FAIL) {
             $dataUpdateTransactions['status'] = Transaction::STATUS_FAIL;
-        } else if ($status == Package::STATUS_SUCCESS) {
+        } else if ($status == Package::STATUS_ORDER_SUCCESS) {
             $dataUpdateTransactions['status'] = Transaction::STATUS_SUCCESS;
 
             // tru tien cua cac account
@@ -136,7 +131,7 @@ class TransactionService
                     'balance' => $account->balance - $eachTransaction->amount
                 ]);
             }
-        } else if ($status == Package::STATUS_WAITING) {
+        } else if ($status == Package::STATUS_ORDER_WAITING) {
             $dataUpdateTransactions['status'] = Transaction::STATUS_WAITING;
         }
 

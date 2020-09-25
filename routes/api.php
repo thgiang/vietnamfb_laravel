@@ -46,7 +46,8 @@ Route::group([
 
 Route::group([
     'middleware' => ['api', 'jwt.verify', 'admin'],
-    'namespace' => 'Api\Admin'
+    'namespace' => 'Api\Admin',
+    'prefix' => 'package'
 ], function ($router) {
     Route::post('refund/submit', 'PackageController@refundSubmit');
 });

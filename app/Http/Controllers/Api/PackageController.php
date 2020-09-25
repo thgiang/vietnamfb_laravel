@@ -73,7 +73,7 @@ class PackageController extends BaseController
             'account_id' => auth()->user()->id,
             'shop_service_id' => $data['shop_service_id'],
             'type' => $data['service_type'],
-            'status' => Package::STATUS_DOING,
+            'status' => Package::STATUS_ORDER_DOING,
             'amount' => $amount,
             'quantity' => $data['quantity'],
             'package_json' => json_encode($data)
@@ -91,9 +91,16 @@ class PackageController extends BaseController
 
         }
 
-        unset($transactionPackageStatus['transaction_ids']);
+        $dataPackageUpdate = [
+            'status' => $transactionPackageStatus['status'],
+            'reason' => $transactionPackageStatus['reason']
+        ];
 
-        $package->update($transactionPackageStatus);
+        if ($transactionPackageStatus['status'] == Package::STATUS_ORDER_SUCCESS) {
+            $dataPackageUpdate['status_process'] = Package::STATUS_PROCESS_WAIT;
+        }
+
+        $package->update($dataPackageUpdate);
 
         return response([
             'success' => true,

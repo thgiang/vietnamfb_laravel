@@ -23,6 +23,12 @@ class PackageController extends BaseController
             return response(Utils::FailedResponse('Không tìm thấy đơn hàng này'));
         }
 
+        // todo: check dieu kien don de hoan tien
+
+        $package->update([
+            'status_process' => Package::STATUS_PROCESS_DOING
+        ]);
+
         $transactions = Transaction::where('package_id', $package->id)->get();
 
         DB::beginTransaction();
@@ -48,7 +54,8 @@ class PackageController extends BaseController
                     'type' => Transaction::TYPE_REFUND,
                     'status' => Transaction::STATUS_SUCCESS,
                     'quantity' => $quantity,
-                    'amount' => -1 * $refundAmount
+                    'amount' => -1 * $refundAmount,
+                    'reason' => 'Hoàn trả tiền thành công'
                 ];
 
                 Transaction::create($refundDataTransaction);
@@ -59,9 +66,20 @@ class PackageController extends BaseController
                 ]);
             }
 
+            $package->update([
+                'status' => Package::STATUS_REFUND_SUCCESS,
+                'status_process' => Package::STATUS_PROCESS_SUCCESS,
+                'reason' => 'Hoàn trả tiền thành công'
+            ]);
+
             DB::commit();
         } catch (\Exception $ex) {
             DB::rollBack();
+
+            $package->update([
+                'status' => Package::STATUS_REFUND_FAIL,
+                'reason' => 'Lỗi hệ thống: ' . $ex->getMessage()
+            ]);
 
             return response(Utils::FailedResponse('Có chút lỗi xảy ra, vui lòng liên hệ admin để được giải quyết. Mã lỗi: ' . $ex->getMessage()));
         }
