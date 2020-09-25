@@ -24,21 +24,49 @@ class AccountShopSeeder extends Seeder
             'has_shop_id' => 1
         ]);
 
-        $account = \App\Models\Account::create([ // create a new user
+        $accountAndShop = \App\Models\Account::create([ // create a new user
+            'email' => 'accandshop1@gmail.com',
+            'username' => 'accandshop1',
+            'password' => \Illuminate\Support\Facades\Hash::make('accandshop1'),
+            'fullname' => 'Acc and shop 1',
+            'tel' => '0339573051',
+            'is_root' => 0,
+            'shop_id' => 1,
+            'has_shop_id' => 2
+        ]);
+
+        $accountShop1 = \App\Models\Account::create([ // create a new user
             'email' => 'acc1@gmail.com',
             'username' => 'acc1',
             'password' => \Illuminate\Support\Facades\Hash::make('acc1'),
             'fullname' => 'Acc 1',
-            'tel' => '0339573051',
+            'tel' => '0339573052',
             'is_root' => 0,
             'shop_id' => 1
+        ]);
+
+        $accountShop2 = \App\Models\Account::create([ // create a new user
+            'email' => 'acc2@gmail.com',
+            'username' => 'acc2',
+            'password' => \Illuminate\Support\Facades\Hash::make('acc2'),
+            'fullname' => 'Acc 2',
+            'tel' => '0339573053',
+            'is_root' => 0,
+            'shop_id' => 2
         ]);
 
         \App\Models\Shop::create([
             'account_id' => $root->id,
             'ref_id' => -1,
-            'name' => 'Shop Root Root',
+            'name' => 'Shop Root',
             'domain' => 'http://vietnamfb.local:8081'
+        ]);
+
+        \App\Models\Shop::create([
+            'account_id' => $root->id,
+            'ref_id' => -1,
+            'name' => 'Shop 1',
+            'domain' => 'http://shop1.vietnamfb.local:8081'
         ]);
     }
 }
