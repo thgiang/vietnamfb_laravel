@@ -48,6 +48,7 @@ class TransactionService
 
             $transaction = Transaction::create([
                 'package_id' => $packageId,
+                'ref_id' => !empty($transaction) ? $transaction->id : -1,
                 'shop_id' => $shop->id,
                 'shop_service_id' => $shopService->id,
                 'amount' => ($shopService->price * $quantity),

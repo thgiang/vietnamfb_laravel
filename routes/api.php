@@ -20,7 +20,6 @@ Route::group([
     Route::post('register', 'Api\AuthController@register');
 });
 
-
 Route::group([
     'middleware' => ['api', 'jwt.verify'],
     'namespace' => 'Api'
@@ -44,3 +43,11 @@ Route::group([
         Route::post('add-order', 'PackageController@addOrder');
     });
 });
+
+Route::group([
+    'middleware' => ['api', 'jwt.verify', 'admin'],
+    'namespace' => 'Api\Admin'
+], function ($router) {
+    Route::post('refund/submit', 'PackageController@refundSubmit');
+});
+
