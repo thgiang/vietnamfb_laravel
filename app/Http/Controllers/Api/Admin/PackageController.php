@@ -78,10 +78,11 @@ class PackageController extends BaseController
 
             $package->update([
                 'status' => Package::STATUS_REFUND_FAIL,
+                'status_process' => Package::STATUS_PROCESS_FAIL,
                 'reason' => 'Lỗi hệ thống: ' . $ex->getMessage()
             ]);
 
-            return response(Utils::FailedResponse('Có chút lỗi xảy ra, vui lòng liên hệ admin để được giải quyết. Mã lỗi: ' . $ex->getMessage()));
+            return response(Utils::FailedResponse('Có chút lỗi xảy ra, vui lòng liên hệ admin để được giải quyết. Chi tiết lỗi: ' . $ex->getMessage()));
         }
 
         return response([
