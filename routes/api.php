@@ -20,6 +20,7 @@ Route::group([
     Route::post('register', 'Api\AuthController@register');
 });
 
+// all nguoi dung
 Route::group([
     'middleware' => ['api', 'jwt.verify'],
     'namespace' => 'Api'
@@ -41,6 +42,7 @@ Route::group([
     ], function ($router) {
         Route::get('detail/{id}', 'PackageController@detail');
         Route::post('add-order', 'PackageController@addOrder');
+        Route::post('cancel-order', 'PackageController@cancelOrder');
     });
 });
 

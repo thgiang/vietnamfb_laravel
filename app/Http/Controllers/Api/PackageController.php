@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\Utils;
+use App\Http\Requests\CancelOrderRequest;
 use App\Models\Account;
 use App\Models\Package;
 use App\Models\Service;
@@ -126,6 +127,26 @@ class PackageController extends BaseController
         return response([
             'success' => true,
             'data' => $service
+        ]);
+    }
+
+    public function cancelOrder(CancelOrderRequest $request) {
+        $packageId = $request->input('package_id');
+
+        $package = Package::where('shop_id', $this->shopNow)->where('id', $packageId)->first();
+
+        if ($package->status_process == Package::STATUS_PROCESS_SUCCESS) {
+            return response(Utils::FailedResponse('Đơn này đã thực hiện thành công, không thể hủy đơn'));
+        }
+
+        $package->update([
+            'status_process' => Package::STATUS_PROCESS_CANCEL,
+            'status' => Package::STATUS_CUSTOMER_CANCEL
+        ]);
+
+        return response([
+            'success' => true,
+            'message' => 'Đã hủy đơn thành công. Nếu dịch vụ đang chạy dở, bạn sẽ được hoàn lại tiền còn lại tương ứng'
         ]);
     }
 }

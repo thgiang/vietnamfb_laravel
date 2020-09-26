@@ -16,7 +16,7 @@ class PackageController extends BaseController
     }
 
     public function listOrder(Request $request) {
-        $packages = Package::where('shop_id', $this->shopNow)->paginate($this->limit);
+        $packages = Package::where('shop_id', $this->shopNow)->orderBy('id', 'desc')->paginate($this->limit);
 
         return response([
             'success' => true,

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Helpers\Utils;
 use App\Http\Controllers\Api\BaseController;
+use App\Http\Requests\Admin\ProcessStartRequest;
 use App\Http\Requests\Admin\RefundSubmitRequest;
 use App\Models\Account;
 use App\Models\Package;
@@ -91,7 +92,20 @@ class PackageController extends BaseController
         ]);
     }
 
-    public function processStart() {
+    public function processStart(ProcessStartRequest $request) {
+        $packageId = $request->input('package_id');
 
+        $package = Package::find($packageId);
+        if (empty($package)) {
+            return response(Utils::FailedResponse('Không tìm thấy đơn hàng này'));
+        }
+
+        $package->update([
+            'status_process' => Package::STATUS_PROCESS_DOING
+        ]);
+
+        // todo: tich hop api mfb
+
+        // se co 1 cronjob chay hang 10 phut check xem co nhung don hang nao dang process doing thi call api fb de lay so subs
     }
 }
