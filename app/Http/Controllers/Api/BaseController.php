@@ -15,5 +15,6 @@ class BaseController extends Controller
     public function __construct(Request $request)
     {
         $this->shopNow = $request->header('shopId');
+        $this->limit = config('constants.pagination.limit', 20);
     }
 }

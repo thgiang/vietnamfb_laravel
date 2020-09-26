@@ -12,7 +12,6 @@ class PackageController extends BaseController
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->limit = config('constants.pagination.limit', 20);
     }
 
     public function listOrder(Request $request) {

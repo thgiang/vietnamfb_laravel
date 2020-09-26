@@ -100,6 +100,10 @@ class PackageController extends BaseController
             return response(Utils::FailedResponse('Không tìm thấy đơn hàng này'));
         }
 
+        if ($package->status != Package::STATUS_ORDER_SUCCESS) {
+            return response(Utils::FailedResponse('Chỉ có thể start 1 dịch vụ có trạng thái Đặt hàng thành công'));
+        }
+
         $package->update([
             'status_process' => Package::STATUS_PROCESS_DOING
         ]);

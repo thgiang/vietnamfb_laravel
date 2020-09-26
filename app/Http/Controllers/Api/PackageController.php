@@ -141,12 +141,21 @@ class PackageController extends BaseController
 
         $package->update([
             'status_process' => Package::STATUS_PROCESS_CANCEL,
-            'status' => Package::STATUS_CUSTOMER_CANCEL
+            'status' => auth()->user()->has_shop_id != -1 ? Package::STATUS_ADMIN_CANCEL : Package::STATUS_CUSTOMER_CANCEL
         ]);
 
         return response([
             'success' => true,
-            'message' => 'Đã hủy đơn thành công. Nếu dịch vụ đang chạy dở, bạn sẽ được hoàn lại tiền còn lại tương ứng'
+            'message' => 'Đã hủy đơn thành công. Nếu dịch vụ đang chạy dở, bạn sẽ được hoàn lại tiền phần còn lại tương ứng'
+        ]);
+    }
+
+    public function listOrder(Request $request) {
+        $packages = Package::where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->paginate($this->limit);
+
+        return response([
+            'success' => true,
+            'data' => $packages
         ]);
     }
 }

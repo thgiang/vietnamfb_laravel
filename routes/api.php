@@ -43,6 +43,7 @@ Route::group([
         Route::get('detail/{id}', 'PackageController@detail');
         Route::post('add-order', 'PackageController@addOrder');
         Route::post('cancel-order', 'PackageController@cancelOrder');
+        Route::get('list-order', 'PackageController@listOrder');
     });
 });
 
