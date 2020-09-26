@@ -44,11 +44,21 @@ Route::group([
     });
 });
 
+// la root shop, la thang Trung
 Route::group([
     'middleware' => ['api', 'jwt.verify', 'admin'],
     'namespace' => 'Api\Admin',
-    'prefix' => 'package'
+    'prefix' => 'admin/package'
 ], function ($router) {
     Route::post('refund/submit', 'PackageController@refundSubmit');
+    Route::post('process/start', 'PackageController@processStart');
 });
 
+// la cac chu web, ke ca thang Trung
+Route::group([
+    'middleware' => ['api', 'jwt.verify', 'shop.verify'],
+    'namespace' => 'Api\Shop',
+    'prefix' => 'shop/package'
+], function ($router) {
+    Route::get('list-order', 'PackageController@listOrder');
+});

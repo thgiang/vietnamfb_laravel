@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CorsMiddleware;
+use App\Http\Middleware\ShopMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -67,7 +68,8 @@ class Kernel extends HttpKernel
         'jwt.auth' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
         'jwt.refresh' => \Tymon\JWTAuth\Http\Middleware\RefreshToken::class,
         'jwt.verify' => \App\Http\Middleware\JWTMiddleware::class,
-        'admin' => AdminMiddleware::class
+        'admin' => AdminMiddleware::class,
+        'shop.verify' => ShopMiddleware::class
     ];
 
     /**

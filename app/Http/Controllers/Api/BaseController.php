@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 class BaseController extends Controller
 {
     protected $shopNow;
+    protected $limit;
+    protected $page;
 
     public function __construct(Request $request)
     {
