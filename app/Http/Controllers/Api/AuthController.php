@@ -20,12 +20,12 @@ class AuthController extends BaseController
 
         $credentials['shop_id'] = $this->shopNow;
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             // kiem tra neu account do la 1 shop thuoc shop current
             unset($credentials['shop_id']);
             $credentials['has_shop_id'] = $this->shopNow;
 
-            if (! $token = auth()->attempt($credentials)) {
+            if (!$token = auth()->attempt($credentials)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Tài khoản hoặc mật khẩu không đúng'
@@ -36,19 +36,35 @@ class AuthController extends BaseController
         return $this->respondWithToken($token);
     }
 
-    public function register(RegisterRequest $request) {
+    public function register(RegisterRequest $request)
+    {
         $data = $request->all();
 
-        $checkAccount = Account::where('shop_id', $this->shopNow)->where('email', $data['email'])->count();
+        $checkAccount = Account::where('shop_id', $this->shopNow)->where(function ($query) use ($data) {
+            $query->where('email', $data['email'])->orWhere('tel', $data['tel']);
+        })->first();
 
-        if ($checkAccount > 0) {
+        if ($checkAccount) {
+            $existingMessage = '';
+            if ($checkAccount->tel === $data['tel']) {
+                if ($checkAccount->email === $data['email']) {
+                    $existingMessage = 'Số điện thoại và email này đã tồn tại trong hệ thống';
+                } else {
+                    $existingMessage = 'Số điện thoại này đã tồn tại trong hệ thống';
+                }
+            } else {
+                $existingMessage = 'Email này đã tồn tại trong hệ thống';
+            }
             return response([
                 'success' => false,
-                'message' => 'Email đã tồn tại trong hệ thống'
+                'message' => $existingMessage
             ]);
         }
 
         $account = Account::create([
+            'fullname' => $data['fullname'],
+            'tel' => $data['tel'],
+            'username' => $data['tel'], // Username dùng số đt luôn
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'is_root' => 0,
@@ -105,7 +121,7 @@ class AuthController extends BaseController
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
