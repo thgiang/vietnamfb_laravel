@@ -45,6 +45,12 @@ Route::group([
         Route::post('cancel-order', 'PackageController@cancelOrder');
         Route::get('list-order', 'PackageController@listOrder');
     });
+
+    Route::group([
+        'prefix' => 'account'
+    ], function ($router) {
+        Route::get('analytics', 'AccountController@analytics');
+    });
 });
 
 // la root shop, la thang Trung
