@@ -6,8 +6,6 @@ use App\Helpers\Utils;
 use App\Models\Account;
 use App\Models\Transaction;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class AccountController extends BaseController
 {
@@ -30,9 +28,31 @@ class AccountController extends BaseController
 
         $account->amount_total = !empty($amountTotal->amount_total) ? $amountTotal->amount_total : 0;
 
+        // tinh bieu do
+        $perMonthAnalytics = [];
+
+        for ($i = 0; $i <= 5; $i++) {
+            $startMonth = Carbon::now()->subMonths($i)->startOfMonth()->toDateTimeString();
+            $endMonth = Carbon::now()->subMonths($i)->endOfMonth()->toDateTimeString();
+
+            $amountTopUpThisMonth = Transaction::selectRaw('sum(amount) as amount_this_month')->where('shop_id', $this->shopNow)->where('from_account_id', auth()->user()->id)
+                ->where('type', Transaction::TYPE_TOP_UP)->whereBetween('created_at', [$startMonth, $endMonth])
+                ->where('status', Transaction::STATUS_SUCCESS)->first();
+
+            $amountOrderThisMonth = Transaction::selectRaw('sum(amount) as amount_this_month')->where('shop_id', $this->shopNow)->where('from_account_id', auth()->user()->id)
+                ->where('type', Transaction::TYPE_NEW_ORDER)->whereBetween('created_at', [$startMonth, $endMonth])
+                ->where('status', Transaction::STATUS_SUCCESS)->first();
+
+            $perMonthAnalytics[Carbon::now()->subMonths($i)->month] = [
+                'top_up' => !empty($amountTopUpThisMonth->amount_this_month) ? $amountTopUpThisMonth->amount_this_month : 0,
+                'order' => !empty($amountOrderThisMonth->amount_this_month) ? $amountOrderThisMonth->amount_this_month : 0
+            ];
+        }
+
         return response([
             'success' => true,
-            'data' => $account
+            'data' => $account,
+            'analytics' => $perMonthAnalytics
         ]);
     }
 }
