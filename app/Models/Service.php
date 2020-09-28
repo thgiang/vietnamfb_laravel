@@ -10,6 +10,7 @@ class Service extends Model
         'name', 'parent_id', 'slug', 'sku', 'description', 'status'
     ];
 
+    const TOP_UP = 0;
     const FB_BUFF_SUB = 1;
 
     const STATUS_DOING = 1;

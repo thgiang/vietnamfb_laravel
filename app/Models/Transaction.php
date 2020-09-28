@@ -14,9 +14,13 @@ class Transaction extends Model
 
     const TYPE_NEW_ORDER = 1;
     const TYPE_REFUND = 2;
+    const TYPE_TOP_UP = 3;
 
     const STATUS_DOING = 1;
     const STATUS_WAITING = 2; // neu trong pipline co 1 thang ref bi het tien thi phai waiting 30p sau se set fail neu van waiting
     const STATUS_FAIL = 3;
     const STATUS_SUCCESS = 4;
+
+    const TOP_UP_PACKAGE_ID = -1;
+    const TOP_UP_SHOP_SERVICE_ID = -1;
 }

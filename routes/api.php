@@ -51,17 +51,18 @@ Route::group([
 Route::group([
     'middleware' => ['api', 'jwt.verify', 'admin'],
     'namespace' => 'Api\Admin',
-    'prefix' => 'admin/package'
+    'prefix' => 'admin'
 ], function ($router) {
-    Route::post('refund/submit', 'PackageController@refundSubmit');
-    Route::post('process/start', 'PackageController@processStart');
+    Route::post('package/refund/submit', 'PackageController@refundSubmit');
+    Route::post('package/process/start', 'PackageController@processStart');
 });
 
 // la cac chu web, ke ca thang Trung
 Route::group([
     'middleware' => ['api', 'jwt.verify', 'shop.verify'],
     'namespace' => 'Api\Shop',
-    'prefix' => 'shop/package'
+    'prefix' => 'shop'
 ], function ($router) {
-    Route::get('list-order', 'PackageController@listOrder');
+    Route::get('package/list-order', 'PackageController@listOrder');
+    Route::post('balance/top-up', 'BalanceController@topUp');
 });
