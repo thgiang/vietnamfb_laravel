@@ -29,4 +29,16 @@ class Package extends Model
     const STATUS_PROCESS_FAIL = 3;
     const STATUS_PROCESS_SUCCESS = 4;
     const STATUS_PROCESS_CANCEL = 5;
+
+    public function account() {
+        return $this->belongsTo(Account::class)->select(['id', 'fullname', 'username', 'email', 'tel', 'balance', 'shop_id', 'has_shop_id']);
+    }
+
+    public function shopService() {
+        return $this->belongsTo(ShopService::class);
+    }
+
+    public function shop() {
+        return $this->belongsTo(Shop::class);
+    }
 }
