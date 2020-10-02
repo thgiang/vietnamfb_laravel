@@ -27,6 +27,7 @@ class AccountController extends BaseController
             ->where('type', Transaction::TYPE_TOP_UP)->where('status', Transaction::STATUS_SUCCESS)->first();
 
         $account->amount_total = !empty($amountTotal->amount_total) ? $amountTotal->amount_total : 0;
+        $account->this_month = Carbon::now()->month;
 
         // tinh bieu do
         $perMonthAnalytics = [];
