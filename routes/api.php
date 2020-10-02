@@ -70,5 +70,6 @@ Route::group([
     'prefix' => 'shop'
 ], function ($router) {
     Route::get('package/list-order', 'PackageController@listOrder');
+    Route::get('account/list-account', 'AccountController@listAccount');
     Route::post('balance/top-up', 'BalanceController@topUp');
 });

@@ -30,4 +30,8 @@ class Account extends Authenticatable implements JWTSubject
     public function shop() {
         return $this->belongsTo(Shop::class, 'id', 'account_id');
     }
+
+    public function belongShop() {
+        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+    }
 }
