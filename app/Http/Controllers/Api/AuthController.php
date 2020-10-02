@@ -88,7 +88,12 @@ class AuthController extends BaseController
         $account = Account::with('shop')->where('shop_id', $this->shopNow)->where('id', auth()->user()->id)->first();
 
         if ($account->has_shop_id == $this->shopNow) {
-            $account->role = 'admin';
+            if ($account->is_root == 1) {
+                $account->role = 'super';
+            } else {
+                $account->role = 'admin';
+            }
+
         } else {
             $account->role = 'user';
         }
