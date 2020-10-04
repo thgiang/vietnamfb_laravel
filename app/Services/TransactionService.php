@@ -69,8 +69,9 @@ class TransactionService
                     'transaction_ids' => $transactionIds
                 ];
             } else if ($account->is_root == 0 && $account->balance < $transaction->amount) {
+                // nếu tài khoản đặt mua ko đủ tiền thì fail luôn, còn 1 tài khoản cấp trên ko đủ tiền thì waiting
                 return [
-                    'status' => Package::STATUS_ORDER_WAITING,
+                    'status' => $account->id == auth()->user()->id ? Package::STATUS_ORDER_FAIL : Package::STATUS_ORDER_WAITING,
                     'reason' => 'Tài khoản '.$account->username.' (ID='.$account->id.') không đủ tiền, vui lòng nạp tiền và thử lại.',
                     'transaction_ids' => $transactionIds
                 ];
