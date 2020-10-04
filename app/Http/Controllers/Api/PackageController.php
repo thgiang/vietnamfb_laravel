@@ -161,9 +161,12 @@ class PackageController extends BaseController
         }])
             ->where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->orderBy('id', 'desc')->skip($skip)->limit($this->limit)->get();
 
+        $total = Package::where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->count();
+
         return response([
             'success' => true,
-            'data' => $packages
+            'data' => $packages,
+            'total' => $total
         ]);
     }
 
@@ -176,9 +179,12 @@ class PackageController extends BaseController
 
         $transactions = Transaction::where('package_id', $package->id)->where('from_account_id', auth()->user()->id)->get();
 
+        $total = Transaction::where('package_id', $package->id)->where('from_account_id', auth()->user()->id)->count();
+
         return response([
             'success' => true,
-            'data' => $transactions
+            'data' => $transactions,
+            'total' => $total
         ]);
     }
 }

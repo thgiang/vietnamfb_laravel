@@ -26,11 +26,16 @@ class PackageController extends BaseController
             $packages = $packages->where('shop_id', $this->shopNow);
         }
 
+        $totalPackages = clone $packages;
+
         $packages = $packages->orderBy('id', 'desc')->skip($skip)->limit($this->limit)->get();
+
+        $total = $totalPackages->count();
 
         return response([
             'success' => true,
-            'data' => $packages
+            'data' => $packages,
+            'total' => $total
         ]);
     }
 }
