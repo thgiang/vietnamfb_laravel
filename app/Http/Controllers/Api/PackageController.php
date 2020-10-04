@@ -153,7 +153,13 @@ class PackageController extends BaseController
     }
 
     public function listOrder(Request $request) {
-        $packages = Package::where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->paginate($this->limit);
+        $page = $request->input('page', 1);
+        $skip = ($page - 1) * $this->limit;
+
+        $packages = Package::with(['shopService' => function($q) {
+            return $q->with('service');
+        }])
+            ->where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->orderBy('id', 'desc')->skip($skip)->limit($this->limit)->get();
 
         return response([
             'success' => true,
