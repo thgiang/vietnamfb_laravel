@@ -6,6 +6,7 @@ use App\Helpers\Utils;
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Requests\Admin\ProcessStartRequest;
 use App\Http\Requests\Admin\RefundSubmitRequest;
+use App\Http\Requests\Admin\UpdatePackageRequest;
 use App\Models\Account;
 use App\Models\Package;
 use App\Models\Transaction;
@@ -113,18 +114,35 @@ class PackageController extends BaseController
         // se co 1 cronjob chay hang 10 phut check xem co nhung don hang nao dang process doing thi call api fb de lay so subs
     }
 
-    public function update($id, Request $request) {
+    public function update($id, UpdatePackageRequest $request) {
         $package = Package::find($id);
         if (empty($package)) {
             return response(Utils::FailedResponse('Không tìm thấy đơn hàng này'));
         }
 
         $data = $request->all();
-        $package->update($data);
+
+        if ($data['status_process'] == Package::STATUS_PROCESS_CANCEL) {
+            $data['status'] = Package::STATUS_ADMIN_CANCEL;
+        }
+
+        DB::beginTransaction();
+        try {
+            $package->update($data);
+
+            Transaction::where('package_id', $package->id)->where('type', Transaction::TYPE_NEW_ORDER)->update([
+                'status' => $data['status']
+            ]);
+
+            DB::commit();
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return response(Utils::FailedResponse('Lỗi hệ thống, chi tiết lỗi: ' . $ex->getMessage()));
+        }
 
         return response([
             'success' => true,
-            'message' => 'Cập nhật thành công'
+            'message' => 'Cập nhật đơn hàng thành công'
         ]);
     }
 }

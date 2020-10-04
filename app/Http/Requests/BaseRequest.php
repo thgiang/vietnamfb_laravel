@@ -20,6 +20,6 @@ class BaseRequest extends FormRequest
             [
                 'success' => false,
                 'message' => $values[0][0] ?? 'Không được để trống'
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+            ], 200));
     }
 }
