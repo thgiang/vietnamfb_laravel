@@ -17,4 +17,8 @@ class Utils
             'message' => $message
         ];
     }
+
+    public static function genCodePackage($shopId, $serviceId) {
+        return 'S' . $shopId . '.SV' . $serviceId . '.' . time() . '.' . mt_rand(0, 100);
+    }
 }

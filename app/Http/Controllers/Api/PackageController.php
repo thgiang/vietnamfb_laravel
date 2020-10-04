@@ -68,9 +68,12 @@ class PackageController extends BaseController
         // tinh amount
         $amount = $shopService->price * intval($data['quantity']);
 
+        $code = Utils::genCodePackage($this->shopNow, $data['shop_service_id']);
+
         // tao don
         $package = Package::create([
             'shop_id' => $this->shopNow,
+            'code' => $code,
             'account_id' => auth()->user()->id,
             'shop_service_id' => $data['shop_service_id'],
             'type' => $data['service_type'],

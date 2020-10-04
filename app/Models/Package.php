@@ -8,7 +8,7 @@ class Package extends Model
 {
     protected $fillable = [
         'shop_id', 'amount', 'account_id', 'status', 'type', 'reason', 'package_json', 'shop_service_id', 'shop_service_id',
-        'quantity', 'status_process', 'quantity_processed', 'quantity_showed'
+        'quantity', 'status_process', 'quantity_processed', 'quantity_showed', 'code'
     ];
 
     protected $hidden = [
