@@ -62,6 +62,7 @@ Route::group([
 ], function ($router) {
     Route::post('package/refund/submit', 'PackageController@refundSubmit');
     Route::post('package/process/start', 'PackageController@processStart');
+    Route::post('package/{id}/update', 'PackageController@update');
 });
 
 // la cac chu web, ke ca thang Trung

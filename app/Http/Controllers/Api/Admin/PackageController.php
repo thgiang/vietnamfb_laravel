@@ -112,4 +112,19 @@ class PackageController extends BaseController
 
         // se co 1 cronjob chay hang 10 phut check xem co nhung don hang nao dang process doing thi call api fb de lay so subs
     }
+
+    public function update($id, Request $request) {
+        $package = Package::find($id);
+        if (empty($package)) {
+            return response(Utils::FailedResponse('Không tìm thấy đơn hàng này'));
+        }
+
+        $data = $request->all();
+        $package->update($data);
+
+        return response([
+            'success' => true,
+            'message' => 'Cập nhật thành công'
+        ]);
+    }
 }
