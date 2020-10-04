@@ -28,9 +28,9 @@ class PackageController extends BaseController
 
         $totalPackages = clone $packages;
 
-        $packages = $packages->orderBy('id', 'desc')->skip($skip)->limit($this->limit)->get();
-
         $total = $totalPackages->count();
+
+        $packages = $packages->orderBy('id', 'desc')->skip($skip)->limit($this->limit)->get();
 
         return response([
             'success' => true,
