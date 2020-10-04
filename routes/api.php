@@ -44,6 +44,7 @@ Route::group([
         Route::post('add-order', 'PackageController@addOrder');
         Route::post('cancel-order', 'PackageController@cancelOrder');
         Route::get('list-order', 'PackageController@listOrder');
+        Route::get('list-order/{id}/transactions', 'PackageController@listTransactionByOrderId');
     });
 
     Route::group([

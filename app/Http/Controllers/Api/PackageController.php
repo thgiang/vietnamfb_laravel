@@ -166,4 +166,19 @@ class PackageController extends BaseController
             'data' => $packages
         ]);
     }
+
+    public function listTransactionByOrderId($id, Request $request) {
+        $package = Package::where('shop_id', $this->shopNow)->where('id', $id)->where('account_id', auth()->user()->id)->first();
+
+        if (empty($package)) {
+            return response(Utils::FailedResponse('Không tìm thấy đơn hàng này'));
+        }
+
+        $transactions = Transaction::where('package_id', $package->id)->where('from_account_id', auth()->user()->id)->get();
+
+        return response([
+            'success' => true,
+            'data' => $transactions
+        ]);
+    }
 }
