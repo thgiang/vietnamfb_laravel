@@ -14,4 +14,8 @@ class Service extends Model
     const FB_BUFF_SUB = 1;
 
     const STATUS_DOING = 1;
+
+    public function shopService() {
+        return $this->hasMany(ShopService::class);
+    }
 }

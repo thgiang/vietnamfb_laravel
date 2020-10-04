@@ -111,14 +111,16 @@ class PackageController extends BaseController
         ]);
     }
 
-    public function detail($id) {
-        if (empty($id)) {
-            return response(Utils::FailedResponse('id is required'));
+    public function detail($sku) {
+        if (empty($sku)) {
+            return response(Utils::FailedResponse('sku is required'));
         }
 
-        $service = ShopService::with(['service'])->where('shop_id', $this->shopNow)
+        $service = ShopService::with(['service' => function($q) use($sku) {
+            return $q->where('sku', $sku);
+        }])->where('shop_id', $this->shopNow)
             ->where('service_parent_id', '!=', -1)
-            ->where('status', 1)->where('id', $id)->first();
+            ->where('status', 1)->first();
 
         if (empty($service)) {
             return response(Utils::FailedResponse('Dịch vụ không tìm thấy hoặc đang trong quá trình nâng cấp dịch vụ'));

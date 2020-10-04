@@ -21,7 +21,7 @@ class ServiceSeeder extends Seeder
         $s12 = \App\Models\Service::create([
             'name' => 'Buff Follow Cá Nhân',
             'parent_id' => $s1->id,
-            'slug' => 'facebook-buff/buff-follow',
+            'slug' => 'facebook/buff-follow',
             'sku' => 'FB.BUFF.FOLLOW'
         ]);
 

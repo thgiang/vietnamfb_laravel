@@ -40,7 +40,7 @@ Route::group([
     Route::group([
         'prefix' => 'package'
     ], function ($router) {
-        Route::get('detail/{id}', 'PackageController@detail');
+        Route::get('detail/{sku}', 'PackageController@detail');
         Route::post('add-order', 'PackageController@addOrder');
         Route::post('cancel-order', 'PackageController@cancelOrder');
         Route::get('list-order', 'PackageController@listOrder');
