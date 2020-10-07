@@ -46,8 +46,9 @@ class CorsMiddleware
         }
 
         if ($request->header('isDev') == 1) {
-            Log::info($request->header('HTTP_ORIGIN'));
-            $shopId = $this->_getShop($request->header('HTTP_ORIGIN'));
+            Log::info($request->header('isDev'));
+            Log::info($request->header('HTTPORIGIN'));
+            $shopId = $this->_getShop($request->header('HTTPORIGIN'));
             if (empty($shopId)) {
                 return response([
                     "success" => false,
