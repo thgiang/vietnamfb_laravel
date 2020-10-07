@@ -46,6 +46,7 @@ class CorsMiddleware
         }
 
         if ($request->header('isDev') == 1) {
+            Log::info($request->header('HTTP_ORIGIN'));
             $shopId = $this->_getShop($request->header('HTTP_ORIGIN'));
             if (empty($shopId)) {
                 return response([
@@ -67,7 +68,6 @@ class CorsMiddleware
     }
 
     private function _getShop($domain) {
-        Log::info($domain);
         $shop = Shop::where('domain', $domain)->first();
 
         return !empty($shop->id) ? $shop->id : null;
