@@ -5,3 +5,6 @@
 - Run `composer install`
 - Run `php artisan key:generate`
 - Run `php artisan serve`, default ip:host is `127.0.0.1:8000`
+
+##setup Postman to call api
+- add header params: `isDev=1`, `HTTPORIGIN=http://vietnamfb.local:8081`
