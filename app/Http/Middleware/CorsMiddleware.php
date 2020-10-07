@@ -25,6 +25,7 @@ class CorsMiddleware
         ];
 
         if($request->server('HTTP_ORIGIN')){
+
             if (in_array($request->server('HTTP_ORIGIN'), $allowedOrigins)) {
                 $shopId = $this->_getShop($request->server('HTTP_ORIGIN'));
                 if (empty($shopId)) {
@@ -49,7 +50,7 @@ class CorsMiddleware
             if (empty($shopId)) {
                 return response([
                     "success" => false,
-                    'message' => '403 Permission denied'
+                    'message' => '403 Permission denied.'
                 ], 403);
             }
 
@@ -66,6 +67,7 @@ class CorsMiddleware
     }
 
     private function _getShop($domain) {
+        Log::info($domain);
         $shop = Shop::where('domain', $domain)->first();
 
         return !empty($shop->id) ? $shop->id : null;
