@@ -23,7 +23,7 @@ class PostController extends BaseController
             ->orderBy('id', 'desc')->skip($skip)->limit($this->limit)->get();
 
         foreach ($posts as &$post) {
-            $post->last_comment = Comment::with(['replies' => function($q) {
+            $post->last_comment = Comment::with(['account', 'replies' => function($q) {
                 return $q->with('account');
             }])
                 ->where('post_id', $post->id)->where('parent_id', -1)->orderBy('id', 'desc')->first();
