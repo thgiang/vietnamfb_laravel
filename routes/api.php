@@ -58,6 +58,17 @@ Route::group([
     ], function ($router) {
         Route::get('list', 'PostController@list');
     });
+
+    Route::group([
+        'prefix' => 'support'
+    ], function ($router) {
+        Route::get('count', 'SupportController@count');
+        Route::get('list', 'SupportController@list');
+        Route::get('{id}', 'SupportController@detail');
+        Route::post('create', 'SupportController@create');
+        Route::post('{id}/update', 'SupportController@update');
+        Route::post('{id}/comment', 'SupportController@commentSubmit');
+    });
 });
 
 // la root shop, la thang Trung
