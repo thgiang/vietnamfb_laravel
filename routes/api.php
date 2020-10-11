@@ -52,6 +52,12 @@ Route::group([
     ], function ($router) {
         Route::get('analytics', 'AccountController@analytics');
     });
+
+    Route::group([
+        'prefix' => 'post'
+    ], function ($router) {
+        Route::get('list', 'PostController@list');
+    });
 });
 
 // la root shop, la thang Trung
@@ -74,4 +80,10 @@ Route::group([
     Route::get('package/list-order', 'PackageController@listOrder');
     Route::get('account/list-account', 'AccountController@listAccount');
     Route::post('balance/top-up', 'BalanceController@topUp');
+
+    Route::post('post/create', 'PostController@create');
+    Route::get('post/{id}/edit', 'PostController@edit');
+    Route::post('post/{id}/update', 'PostController@update');
+    Route::get('post/{id}/delete', 'PostController@delete');
+    Route::get('post/list', 'PostController@listPost');
 });
