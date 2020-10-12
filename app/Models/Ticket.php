@@ -13,4 +13,11 @@ class Ticket extends Model
     const STATUS_WAITING = 0;
     const STATUS_DOING = 1;
     const STATUS_DONE = 2;
+
+    const TYPE_BUFF_FB = 1;
+    const TYPE_FB_BUFF_FOLLOW = 2;
+
+    public function comments() {
+        return $this->hasMany(TicketComment::class);
+    }
 }
