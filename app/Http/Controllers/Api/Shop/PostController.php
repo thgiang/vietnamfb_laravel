@@ -115,7 +115,7 @@ class PostController extends BaseController
         $page = $request->input('page', 1);
         $skip = ($page - 1) * $this->limit;
 
-        $posts = Post::with('account');
+        $posts = Post::with(['account', 'shop']);
 
         if (auth()->user()->is_root == 0) {
             $posts = $posts->where('shop_id', $this->shopNow);
