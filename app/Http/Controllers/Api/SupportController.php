@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Utils;
 use App\Http\Requests\CreateTicketRequest;
 use App\Models\Ticket;
+use App\Models\TicketComment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
@@ -63,6 +64,34 @@ class SupportController extends BaseController
             'success' => true,
             'data' => $ticket,
             'message' => 'Tạo ticket hỗ trợ thành công'
+        ]);
+    }
+
+    public function detail($id) {
+        $ticket = Ticket::where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->where('id', $id)->first();
+
+        if (empty($ticket)) {
+            return response(Utils::FailedResponse('Không tìm thấy ticket này'));
+        }
+
+        return response([
+            'success' => true,
+            'data' => $ticket
+        ]);
+    }
+
+    public function commentList($id) {
+        $ticket = Ticket::where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->where('id', $id)->first();
+
+        if (empty($ticket)) {
+            return response(Utils::FailedResponse('Không tìm thấy ticket này'));
+        }
+
+        $comments = TicketComment::where('ticket_id', $ticket->id)->orderBy('id', 'desc')->get();
+
+        return response([
+            'success' => true,
+            'data' => $comments
         ]);
     }
 }

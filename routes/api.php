@@ -65,8 +65,8 @@ Route::group([
         Route::get('count', 'SupportController@count');
         Route::get('list', 'SupportController@list');
         Route::get('{id}', 'SupportController@detail');
+        Route::get('{id}/comments', 'SupportController@commentList');
         Route::post('create', 'SupportController@create');
-        Route::post('{id}/update', 'SupportController@update');
         Route::post('{id}/comment', 'SupportController@commentSubmit');
     });
 });
@@ -97,4 +97,6 @@ Route::group([
     Route::post('post/{id}/update', 'PostController@update');
     Route::get('post/{id}/delete', 'PostController@delete');
     Route::get('post/list', 'PostController@listPost');
+
+    Route::post('support/{id}/update', 'SupportController@update');
 });
