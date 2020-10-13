@@ -22,6 +22,8 @@ class CorsMiddleware
             'http://vietnamfb.local:8081',
             'http://vietnamfb.com',
             'https://vietnamfb.com',
+            'http://beta.vietnamfb.com',
+            'https://beta.vietnamfb.com',
         ];
 
         if($request->server('HTTP_ORIGIN')){
