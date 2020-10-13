@@ -87,11 +87,46 @@ class SupportController extends BaseController
             return response(Utils::FailedResponse('Không tìm thấy ticket này'));
         }
 
-        $comments = TicketComment::where('ticket_id', $ticket->id)->orderBy('id', 'desc')->get();
+        $comments = TicketComment::with('account')->where('ticket_id', $ticket->id)->orderBy('id', 'asc')->get();
 
         return response([
             'success' => true,
             'data' => $comments
+        ]);
+    }
+
+    public function commentSubmit($id, Request $request) {
+        $ticket = Ticket::where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->where('id', $id)->first();
+
+        if (empty($ticket)) {
+            return response(Utils::FailedResponse('Không tìm thấy ticket này'));
+        }
+
+        $data = $request->all();
+
+        if ($request->file('image') && $request->file('image')->isValid()) {
+            $folder = 'tickets';
+            $nameImage = 'ho-tro-binh-luan-'.time();
+            $data['image'] = $this->_saveImage($request->file('image'), $folder, $nameImage);
+        }
+
+        $data['shop_id'] = $this->shopNow;
+        $data['account_id'] = auth()->user()->id;
+        $data['is_user'] = 1;
+        $data['ticket_id'] = $id;
+
+        try {
+            $comment = TicketComment::create($data);
+            $comment = TicketComment::with('account')->where('id', $comment->id)->first();
+        } catch (\Exception $ex) {
+            Log::info(__LINE__.$ex->getMessage());
+            return response(Utils::FailedResponse('Lỗi hệ thống, vui lòng liên hệ admin để được hướng dẫn'));
+        }
+
+        return response([
+            'success' => true,
+            'data' => $comment,
+            'message' => 'Gửi bình luận thành công'
         ]);
     }
 }

@@ -20,6 +20,10 @@ class Post extends Model
 
     public function getImageAttribute()
     {
-        return env('APP_URL') . $this->attributes['image'];
+        if ($this->attributes['image']) {
+            return env('APP_URL') . $this->attributes['image'];
+        }
+
+        return $this->attributes['image'];
     }
 }
