@@ -20,4 +20,9 @@ class Ticket extends Model
     public function comments() {
         return $this->hasMany(TicketComment::class);
     }
+
+    public function getImageAttribute()
+    {
+        return env('APP_URL') . $this->attributes['image'];
+    }
 }

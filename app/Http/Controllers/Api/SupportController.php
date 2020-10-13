@@ -68,7 +68,7 @@ class SupportController extends BaseController
     }
 
     public function detail($id) {
-        $ticket = Ticket::where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->where('id', $id)->first();
+        $ticket = Ticket::withCount('comments')->where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->where('id', $id)->first();
 
         if (empty($ticket)) {
             return response(Utils::FailedResponse('Không tìm thấy ticket này'));
