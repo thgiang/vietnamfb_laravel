@@ -24,6 +24,8 @@ class CorsMiddleware
             'https://vietnamfb.com',
             'http://beta.vietnamfb.com',
             'https://beta.vietnamfb.com',
+            'http://tangnhanh.net',
+            'https://tangnhanh.net',
         ];
 
         if($request->server('HTTP_ORIGIN')){
