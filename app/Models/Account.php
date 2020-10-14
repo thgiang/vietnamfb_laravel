@@ -12,7 +12,7 @@ class Account extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         'fullname', 'username', 'email', 'tel', 'balance', 'is_root', 'password', 'fb_id', 'google_id', 'shop_id',
-        'has_shop_id'
+        'has_shop_id', 'role'
     ];
 
     protected $hidden = ['password'];
