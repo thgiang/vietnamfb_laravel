@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
     protected $fillable = [
-        'title', 'type', 'status', 'content', 'image', 'shop_id', 'account_id'
+        'title', 'type', 'status', 'content', 'image', 'shop_id', 'account_id', 'updated_by'
     ];
 
     const STATUS_WAITING = 0;

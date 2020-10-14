@@ -68,6 +68,7 @@ Route::group([
         Route::get('{id}/comments', 'SupportController@commentList');
         Route::post('create', 'SupportController@create');
         Route::post('{id}/comment', 'SupportController@commentSubmit');
+        Route::post('{id}/close', 'SupportController@closeTicket');
     });
 });
 

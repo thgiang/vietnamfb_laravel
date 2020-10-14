@@ -129,4 +129,23 @@ class SupportController extends BaseController
             'message' => 'Gửi bình luận thành công'
         ]);
     }
+
+    public function closeTicket($id) {
+        $ticket = Ticket::where('shop_id', $this->shopNow)->where('account_id', auth()->user()->id)->where('id', $id)->first();
+
+        if (empty($ticket)) {
+            return response(Utils::FailedResponse('Không tìm thấy ticket này'));
+        }
+
+        $ticket->update([
+            'status' => Ticket::STATUS_DONE,
+            'updated_by' => auth()->user()->id
+        ]);
+
+        return response([
+            'success' => true,
+            'message' => 'Đóng ticket hỗ trợ thành công',
+            'data' => $ticket
+        ]);
+    }
 }
